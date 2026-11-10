@@ -1,6 +1,4 @@
 ### Bai tap 4.1
-# Vẽ 1 biểu đồ cột của hàm xác suất của phân phối siêu bội với N = 100, M = 25
-# và cỡ mẫu n = 15
 N = 100
 M = 25
 n = 15
@@ -11,27 +9,24 @@ barplot(p, x, ylab = "P(X = x)")
 
 
 ### Bai tap 4.2
-# Nếu X có phân phối như trên, đầu tiên tính P(5 <= X <= 12) bằng cách lấy tổng 
-# các xác suất được cho bởi hàm xác suất, và sau đó bằng cách sử dụng hàm phân
-# phối tích lũy
 Px = phyper(12, M, N - M, n) - phyper(5, M, N - M, n)
 cat(Px)
-
 
 
 ### Bai tap 4.3
 rm(list = ls())
 # a) 
-curve(dexp(x, 0.6), 0, 10)
-# b)
-curve(dexp(x, 0.3), 0, 10, add = T)
+curve(dexp(x, 0.6), 0, 10, col = "blue", lwd = 2, main = "Exponential Distribution", xlab = "x", ylab = "Density")
+# b) 
+curve(dexp(x, 0.3), 0, 10, col = "red", lwd = 2, main = "Expenential Distribution", xlab = "x", ylab = "Density",add = TRUE)
+legend("topright", legend = c("lambda = 0.6", "lambda = 0.3"), col = c("blue", "red"), lwd = 2)
 # c)
-# Dien tich phan duoi ham X~Exp(0.6) là:
+# Dien tich phan duoi ham X~Exp(0.6)
 s1 = pexp(10, 0.6) - pexp(0, 0.6)
-# Dien tich phan duoi ham X~Exp(0.3) là:
+# Dien tich phan duoi ham X~Exp(0.3) 
 s2 = pexp(10, 0.3) - pexp(0, 0.3)
-cat(s1, s2)
-
+cat("s1 = ", s1, "\n")
+cat("s2 = ", s2, "\n")
 
 
 ### Bai tap 4.4
