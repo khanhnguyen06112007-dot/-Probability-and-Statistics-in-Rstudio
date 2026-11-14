@@ -11,13 +11,13 @@ output:
 
 | STT | MSSV | Họ và tên |
 | :---: | :---: | :--- |
-| 1 | 25120357 | Nguyễn Văn Khánh |
-| 2 | 25120478 | Huỳnh Tấn Đức |
-| 3 | 25120006 | Phan Gia Lộc |
-| 4 | 25120112 | Ngô Anh Nguyên |
-| 5 | 25120174 | Trương Lâm Thành Danh |
-| 6 | 25120008 | Nguyễn Cao Quốc Thắng |
-| 7 | 25120005 | Trịnh Minh Khoa |
+| 1 | 2512xxxx | Nguyễn Văn Khánh |
+| 2 | 2512xxxx | Huỳnh Tấn Đức |
+| 3 | 2512xxxx | Phan Gia Lộc |
+| 4 | 2512xxxx | Ngô Anh Nguyên |
+| 5 | 2512xxxx | Trương Lâm Thành Danh |
+| 6 | 2512xxxx | Nguyễn Cao Quốc Thắng |
+| 7 | 2512xxxx | Trịnh Minh Khoa |
 ---
 
 ## **Chương 2**
@@ -199,7 +199,6 @@ cat("p = ", p, "\n")
 ## **Chương 3**
 ### **Bài tập 3.1**
 ```{r}
-rm(list = ls())
 # a)
 f = function(x){
   ifelse(x < 0 | x > 2, 0, 0.07 * x^(-0.93))
@@ -215,7 +214,6 @@ cat("Kiểm tra diện tích = ", check, "\n")
 
 ### **Bài tập 3.2**
 ```{r}
-rm(list = ls())
 x = sample(1:5, size = 100, replace = TRUE, prob = c(0.1, 0.2, 0.4, 0.2, 0.1))
 bar = table(x)/100
 barplot(bar)
@@ -223,7 +221,6 @@ barplot(bar)
 
 ### **Bài tập 3.3**
 ```{r}
-rm(list = ls())
 k = 1:5
 f = function(){
   x = sample(1:5, size = 100, replace = TRUE)
@@ -237,7 +234,6 @@ cat("Kiểm tra: ", check1(x), "\n")
 
 ### **Bài tập 3.4**
 ```{r}
-rm(list = ls())
 k = 1:5
 f = function(){
   x = sample(1:5, size = 100, replace = TRUE)
@@ -250,7 +246,6 @@ barplot(x)
 
 ### **Bài tập 3.5**
 ```{r}
-rm(list = ls())
 k = 1:5
 f = function(){
   x = sample(1:5, size = 100, replace = TRUE)
@@ -264,7 +259,6 @@ F(x, 3)
 
 ### **Bài tập 3.6**
 ```{r}
-rm(list = ls())
 k = 1:5
 f = function(){
   x = sample(1:5, size = 100, replace = TRUE)
@@ -277,7 +271,6 @@ plot(stepfun(k, c(0, cumsum(x))), ylab = "F(x)", main = "")
 
 ### **Bài tập 3.7**
 ```{r}
-rm(list = ls())
 f = function(x){
   ifelse(x < 0 | x > 1, 0, 2 * x)
 }
@@ -286,7 +279,6 @@ integrate(function(x) f(x), lower = -Inf, upper = Inf)$value
 
 ### **Bài tập 3.8**
 ```{r}
-rm(list = ls())
 f = function(x){
   ifelse(x < 0 | x > 1, 0, 2 * x)
 }
@@ -295,7 +287,6 @@ integrate(function(x) f(x), lower = -Inf, upper = 0.5)$value
 
 ### **Bài tập 3.9**
 ```{r}
-rm(list = ls())
 f = function(x){
   ifelse(x < 0 | x > 1, 0, 2 * x)
 }
@@ -304,7 +295,6 @@ curve(f(x), from = 0, to = 1)
 
 ### **Bài tập 3.10**
 ```{r}
-rm(list = ls())
 f = function(x){
   ifelse(x < 0 | x > 1, 0, 2 * x)
 }
@@ -313,7 +303,6 @@ uniroot(function(x) f(x) - 0.75, c(0, 1))$root
 
 ### **Bài tập 3.11**
 ```{r}
-rm(list = ls())
 k = 1:5
 f = function(){
   x = sample(1:5, size = 100, replace = TRUE)
@@ -327,7 +316,6 @@ cat(x)
 
 ### **Bài tập 3.12**
 ```{r}
-rm(list = ls())
 k = 1:5
 f = function(){
   x = sample(1:5, size = 100, replace = TRUE)
@@ -346,7 +334,6 @@ print(ketqua)
 
 ### **Bài tập 3.13**
 ```{r}
-rm(list = ls())
 k = 1:5
 f = function(){
   x = sample(1:5, size = 100, replace = TRUE)
@@ -364,7 +351,6 @@ barplot(TinhTanSuat(x))
 
 ### **Bài tập 3.14**
 ```{r}
-rm(list = ls())
 f = function(x){
   ifelse(x < 0 | x > 1, 0, 3*x^2)
 }
@@ -373,7 +359,6 @@ integrate(function(x) f(x), lower = -Inf, upper = Inf)$value
 
 ### **Bài tập 3.15**
 ```{r}
-rm(list = ls())
 f = function(x){
   ifelse(x < 0 | x > 1, 0, 3*x^2)
 }
@@ -382,7 +367,6 @@ integrate(function(x) f(x), lower = 0.2, upper = 0.6)$value
 
 ### **Bài tập 3.16**
 ```{r}
-rm(list = ls())
 f = function(x){
   ifelse(x < 0 | x > 1, 0, 3*x^2)
 }
@@ -392,7 +376,6 @@ uniroot(function(x) F(x) - 0.5, c(0, 1))$root
 
 ### **Bài tập 3.17**
 ```{r}
-rm(list = ls())
 MakeBar = function(k){
   x = sample(1:k, size = 100, replace = TRUE)
   res = as.numeric(table(factor(x, levels = 1:k)))/100
@@ -404,7 +387,6 @@ barplot(x)
 
 ### **Bài tập 3.18**
 ```{r}
-rm(list = ls())
 f = function(x){
   ifelse(x < 2 | x > 4, 0, 1/2)
 }
@@ -414,14 +396,12 @@ result
 
 ### **Bài tập 3.19**
 ```{r}
-rm(list = ls())
 x = runif(n = 100, min = 2, max = 4)
 hist(x)
 ```
 
 ### **Bài tập 3.20**
 ```{r}
-rm(list = ls())
 f = function(x){
   ifelse(x < 0 | x > 1, 0, 6*x*(1-x))
 }
@@ -430,7 +410,6 @@ integrate(function(x) f(x), lower = -Inf, upper = Inf)$value
 
 ### **Bài tập 3.21**
 ```{r}
-rm(list = ls())
 k = 1:7
 MakeBar1 = function(k){
   x = sample(k, size = 100, replace = TRUE)
@@ -446,7 +425,6 @@ phan_vi_0.25
 
 ### **Bài tập 3.22**
 ```{r}
-rm(list = ls())
 x = sample(c("A", "B", "C"), size = 100, replace = TRUE, prob = c(0.2, 0.5, 0.3))
 freq = table(x)
 print(freq)
