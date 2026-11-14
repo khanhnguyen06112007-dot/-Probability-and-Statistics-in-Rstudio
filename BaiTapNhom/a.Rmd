@@ -1,0 +1,195 @@
+---
+title: "Bài tập XSTK chương 2, 3"
+author: "Nhóm XSTK"
+date: "2026-11-14"
+output: html_document
+---
+
+### Danh sách thành viên
+
+| STT | MSSV | Họ và tên |
+| :---: | :---: | :--- |
+| 1 | 25120357 | Nguyễn Văn Khánh |
+| 2 | 25120478 | Huỳnh Tấn Đức |
+| 3 | 25120006 | Phan Gia Lộc |
+| 4 | 25120112 | Ngô Anh Nguyên |
+| 5 | 25120174 | Trương Lâm Thành Danh |
+| 6 | 2512xxxx | Nguyễn Cao Quốc Thắng |
+| 7 | 2512xxxx | Trịnh Minh Khoa |
+---
+
+## Chương 2
+### Bài tập 2.31
+```{r}
+PhepThu = function() sample(1:6, size = 2, replace = TRUE)
+A = function() sum(PhepThu()) == 7
+B = function() sum(PhepThu() == 6) >= 1
+C = function() sum(PhepThu()) %% 2 == 0
+
+AhopB = function(){
+  c = PhepThu()
+  condition = (sum(c == 6) >= 1 | (sum(c) == 7))
+  return (condition)
+}
+
+AGiaoB = function(){
+  c = PhepThu()
+  condition = (sum(c == 6) >= 1 & (sum(c) == 7))
+  return (condition)
+}
+
+BuA = function() sum(PhepThu()) != 7
+AgiaoC = function(){
+  c = PhepThu()
+  condition = (sum(c) == 7 & (sum(c) %% 2 == 0))
+  return (condition)
+}
+
+n = 10000
+QuanTracA = replicate(n, A())
+QuanTracB = replicate(n, B())
+QuanTracC = replicate(n, C())
+QuanTracAHopB = replicate(n, AhopB())
+QuanTracAGiaoB = replicate(n, AGiaoB())
+QuanTracBuA = replicate(n, BuA())
+QuanTracAgiaoC = replicate(n, AgiaoC())
+
+P_a = mean(QuanTracA)
+P_b = mean(QuanTracB)
+P_c = mean(QuanTracC)
+
+P_AgiaoB = mean(QuanTracAGiaoB)
+P_AHopB = mean(QuanTracAHopB)
+P_BuA = mean(QuanTracBuA)
+P_AgiaoC = mean(QuanTracAgiaoC)
+P_AdieuKienC = P_AgiaoC / P_c
+# Câu a:
+cat("Xác suất của biến cố A là: ", P_a , "\n")
+cat("Xác suất của biến cố B là: ", P_b, "\n")
+cat("Xác suất của biến cố C là: ", P_c, "\n")
+# Câu c
+cat("Xác suất của A hợp B là: ", P_AHopB, "\n")
+cat("Xác suất của A giao B là: ", P_AgiaoB, "\n")
+cat("Xác suất của phần bù của A là: ", P_BuA, "\n")
+# Câu d
+cat("Xác suất của A, điều kiện C là: ", P_AdieuKienC, "\n")
+
+```
+
+### Bài tập 2.32
+```{r}
+PhepThu = function() sample(1:6, size = 2, replace = TRUE)
+A = function(){
+  c = PhepThu()
+  x = max(c[1], c[2])
+  return (x == 6)
+}
+
+C = function() sum(PhepThu()) >= 9
+AgiaoC = function(){
+  c = PhepThu()
+  condition = (max(c[1], c[2]) == 6 & (sum(c) >= 9))
+  return (condition)
+}
+
+n = 10000
+QuanTracAgiaoC = replicate(n, AgiaoC())
+QuanTracC = replicate(n, C())
+
+P_AC = mean(QuanTracAgiaoC)
+P_C = mean(QuanTracC)
+
+P = P_AC / P_C
+cat("P(A|C) = ", P, "\n")
+```
+
+## Bài tập 2.33
+```{r}
+PhepThu = function() sample(c(rep("Đỏ", 6), rep("Xanh", 4)), size = 3, replace = FALSE)
+A = function() sum(PhepThu() == "Đỏ") == 2
+B = function() PhepThu()[1] == "Đỏ"
+
+AB = function(){
+  c = PhepThu()
+  condition = (sum(c == "Đỏ") == 2 & c[1] == "Đỏ")
+  return (condition)
+}
+
+n = 10000
+QuanTracAB = replicate(n, AB())
+QuanTracB = replicate(n, B())
+
+P_AB = mean(QuanTracAB)
+P_B = mean(QuanTracB)
+
+P = P_AB / P_B
+cat("P(A|B) = ", P, "\n")
+```
+
+## Bài tập 2.34
+```{r}
+Coin = c("Xu 1", "Xu 2", "Xu 3")
+MatSap = c(0.5, 0.6, 0.8)
+
+MoPhongMotLan = function() {
+  x = sample(Coin, size = 1)
+  p_ngua = if(x == "Xu 1") 1 - 0.5 else if(x == "Xu 2") 1 - 0.6 else 1 - 0.8
+
+  ket_qua_tung = sample(c(TRUE, FALSE), size = 5, replace = TRUE, prob = c(p_ngua, 1 - p_ngua))
+  so_mat_ngua = sum(ket_qua_tung)
+  la_4_ngua = (so_mat_ngua == 4)
+  la_xu_3 = (x == "Xu 3")
+  return(c(la_4_ngua, la_xu_3 && la_4_ngua))
+}
+n = 10000
+KetQua = replicate(n, MoPhongMotLan())
+
+so_lan_4_ngua = sum(KetQua[1, ])
+so_lan_xu3_va_4_ngua = sum(KetQua[2, ])
+
+xac_suat = so_lan_xu3_va_4_ngua / so_lan_4_ngua
+
+cat("Xác suất thực nghiệm đồng xu được chọn là đồng xu thứ 3:", xac_suat, "\n")
+```
+
+## Bài tập 2.35
+```{r}
+set.seed(2026)
+n = 10
+num = 10000
+p1 = 0.03
+A = function(){
+  x = sample(c("Hoạt động", "Hỏng"), size = 10, replace = TRUE, prob = c(1 - p1, p1))
+  return ("Hỏng" %in% x)
+}
+
+p2 = 0.001
+B = function(){
+  x = sample(c("Hoạt động", "Hỏng"), size = 10, replace = TRUE, prob = c(1 - p2, p2))
+  return ("Hỏng" %in% x)
+}
+QuanTrac = replicate(num, A())
+QuanTracB = replicate(num, B())
+
+P = mean(QuanTrac)
+P_B = mean(QuanTracB)
+
+cat("P(A) = ", P, "\n")
+cat("P(B) = ", P_B, "\n")
+```
+
+## Bài tập 2.36
+```{r}
+set.seed(2026)
+n = 10000
+
+experiment = function() {
+  res = sample(1:365, size = 30, replace = TRUE)
+  max(table(res)) >= 3
+}
+
+sims = replicate(n, experiment())
+p = mean(sims)
+
+cat("p = ", p, "\n")
+```
