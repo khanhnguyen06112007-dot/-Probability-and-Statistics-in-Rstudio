@@ -1,0 +1,848 @@
+---
+title: "Ôn thi giữa kì xác suất thống kê (Chương 2)"
+author: "25120357 - Nguyễn Văn Khánh"
+date: "2026-11-20"
+output:
+  word_document: default
+  html_document:
+    df_print: paged
+  pdf_document: default
+---
+# **Chương 2: Biến cố và xác suất**
+## **Bài tập 2.1**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Có một hộp có 10 quả banh(khác nhau) trong đó có 3 quả banh đỏ, còn lại là banh
+  xanh. Lấy ngẫu nhiên 2 quả banh từ hộp không hoàn lại. Mô phỏng phép thử trên
+  </strong>
+</div>
+```{r}
+rm(list = ls())
+sample(x = c(rep("Đỏ", 3), rep("Xanh", 7)), size = 2, replace = FALSE)
+```
+
+## **Bài tập 2.2**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Một bộ bài tây có 52 lá bài gồm 13 quân bài từ K, Q, J, 10, 9, 8, 7, 6, 5, 4, 3, 2,
+  A, mỗi quân bài có 4 chất cơ, rô, chuồn, bích. Lấy ngẫu nhiên 2 lá bài từ bộ bài tây. Mô phỏng
+  phép thử trên.
+  </strong>
+</div>
+```{r}
+rm(list = ls())
+So = c(2:10, "K", "Q", "J", "A")
+Chat = c("Cơ", "Rô", "Chuồn", "Bích")
+
+So = rep(So, each = 4)
+Chat = rep(Chat, time = 13)
+
+BoBai = paste(So, Chat, sep = " ")
+sample(BoBai, size = 2, replace = FALSE)
+```
+
+## **Bài tập 2.3**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Tung con xúc xắc cân đối đồng chất 4 lần và 24 lần. Mô phỏng phép thử trên</strong>
+</div>
+```{r}
+# Tung 4 lần
+sample(x = 1:6, size = 4, replace = TRUE)
+# Tung 24 lần
+sample(x = 1:6, size = 24, replace = TRUE)
+```
+
+## **Bài tập 2.4**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Tung con xúc xắc cân đối đồng chất 2 lần. Đặt các biến cố sau:<br></strong>
+  <strong> A = "Tổng số nút là lớn hơn 9"<br></strong>
+  <strong> B = "Số nút ở 2 lần tung là bằng nhau"<br></strong>
+  <strong> Hãy mô phỏng các biến cố trên có xảy ra hay không khi thực hiện phép thử.</strong>
+</div>
+```{r}
+PhepThu = function() sample(x = 1:6, size = 2, replace = TRUE)
+A = function(){
+  x = PhepThu()
+  return (x[1] + x[2] > 9)
+}
+B = function(){
+  x = PhepThu()
+  return (x[1] == x[2])
+}
+A()
+B()
+```
+
+## **Bài tập 2.5**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> (Tiếp tục Bài tập 2.4). Với các biến cố như trong Bài tập 2.4, hãy mô phỏng các
+  biến cố sau đây có xảy ra hay không khi thực hiện phép thử: $A \cap B$, $A \cup B$, $A \setminus B$, $B \setminus A$, $\overline{A}$, $\overline{B}$
+  </strong>
+</div>
+```{r}
+rm(list = ls())
+PhepThu = function(){
+  sample(1:6, size = 2, replace = TRUE)
+}
+
+A = function(){
+  x = PhepThu()
+  return (x[1] + x[2] > 9)
+}
+B = function(){
+  x = PhepThu()
+  return (x[1] == x[2])
+}
+
+AgiaoB = function(){
+  x = PhepThu()
+  condition1 = sum(x) >= 9
+  condition2 = x[1] == x[2]
+  return (condition1 & condition2)
+}
+AhopB = function(){
+  x = PhepThu()
+  condition1 = sum(x) >= 9
+  condition2 = x[1] == x[2]
+  return (condition1 | condition2)
+}
+AhieuB = function(){
+  x = PhepThu()
+  condition1 = sum(x) >= 9
+  condition2 = x[1] == x[2]
+  return (condition1 & !condition2)
+}
+BhieuA = function(){
+  x = PhepThu()
+  condition1 = sum(x) >= 9
+  condition2 = x[1] == x[2]
+  return (condition2 & !condition1)
+}
+BuA    = function(){
+  x = PhepThu()
+  condition1 = sum(x) >= 9
+  return (!condition1)
+}
+BuB    = function(){
+  x = PhepThu()
+  condition2 = x[1] == x[2]
+  return (!condition2)
+}
+
+# 5. Kiểm tra kết quả
+cat("Kết quả tung 2 xúc xắc:", PhepThu(), "\n")
+cat("Biến cố A (tổng > 9):", A(), "\n")
+cat("Biến cố B (2 mặt giống nhau):", B(), "\n\n")
+
+cat("A giao B:", AgiaoB(), "\n")
+cat("A hợp B: ", AhopB(), "\n")
+cat("A hiệu B:", AhieuB(), "\n")
+cat("B hiệu A:", BhieuA(), "\n")
+cat("B bù A:  ", BuA(), "\n")
+cat("B bù B:  ", BuB(), "\n")
+```
+
+## **Bài tập 2.6**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> (Tiếp tục Bài tập 2.1). Tính xác suất: <br>
+  (a) Cả 2 banh đều đỏ. <br>
+  (b) Có đúng 1 banh xanh. <br>
+  </strong>
+</div>
+```{r}
+rm(list = ls())
+PhepThu = function() sample(x = c(rep("Đỏ", 3), rep("Xanh", 7)), size = 2, replace = FALSE)
+A = function() sum(PhepThu() == "Đỏ") == 2
+B = function() sum(PhepThu() == "Xanh") == 1
+
+n = 10000
+QuanTracA = replicate(n, A())
+QuanTracB = replicate(n, B())
+P_a = mean(QuanTracA)
+P_b = mean(QuanTracB)
+cat("Xác suất để cả 2 banh đều đỏ", P_a, "\n")
+cat("Xác suất để có đúng 1 banh xanh", P_b, "\n")
+```
+
+## **Bài tập 2.7**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> (Tiếp tục Bài tập 2.2). Tính xác suất chúng thuộc cùng quân bài.</strong>
+</div>
+```{r}
+rm(list = ls())
+rm(list = ls())
+So = c(2:10, "K", "Q", "J", "A")
+Chat = c("Cơ", "Rô", "Chuồn", "Bích")
+
+So = rep(So, each = 4)
+Chat = rep(Chat, time = 13)
+
+BoBai = paste(So, Chat, sep = " ")
+PhepThu = function() sample(BoBai, size = 2, replace = FALSE)
+A = function(){
+  x = PhepThu()
+  strsplit(x[1], split = " ")[[1]][1] == strsplit(x[2], split = " ")[[1]][1]
+}
+n = 10000
+QuanTrac = replicate(n, A())
+P = mean(QuanTrac)
+cat("Xác suất rút 2 lá từ bộ bài có cùng quân bài là: ", P, "\n")
+```
+
+## **Bài tập 2.8**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> (Bài toán Monty Hall). Trong một trò chơi truyền hình ở Mỹ, người chơi đứng trước
+  3 cánh cửa. Phía sau một cánh cửa là một chiếc xe hơi, phía sau hai cánh cửa còn lại là các
+  con dê. Đầu tiên, người chơi chọn ngẫu nhiên 1 trong 3 cánh cửa. Sau đó, người dẫn chương 
+  trình sẽ mở một trong 2 cánh cửa còn lại có con dê phía sau. Lúc này người chơi sẽ đưa ra 
+  quyết định có thay đổi lựa chọn ban đầu hay không. <br><br>
+  
+  Dùng mô phỏng để tính xác suất chọn được cửa có xe hơi trong hai khả năng quyết định của
+  người chơi
+  </strong>
+</div>
+```{r}
+rm(list = ls())
+Experiment = function() {
+  CacCua = 1:3
+  Xe = sample(CacCua, 1)
+  ChonBanDau = sample(CacCua, 1)
+
+  CuaChuaChon = CacCua[CacCua != ChonBanDau]
+  CuaCoDe = CuaChuaChon[CuaChuaChon != Xe]
+  CuaMo = CuaCoDe[sample(1:length(CuaCoDe), 1)]
+
+  CuaDoi = CacCua[CacCua != ChonBanDau & CacCua != CuaMo]
+  
+  GiuNguyen = (ChonBanDau == Xe)
+  DoiCua = (CuaDoi == Xe)
+  
+  return(c(GiuNguyen, DoiCua))
+}
+
+n = 10000
+KetQua = replicate(n, Experiment())
+P_Giu = mean(KetQua[1, ])
+P_Doi = mean(KetQua[2, ])
+cat("Xác suất thắng khi giữ cửa và đổi cửa lần lượt là", P_Giu, "và", P_Doi)
+```
+
+## **Bài tập 2.9**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Tung một đồng xu 3 lần. Tính xác suất để số mặt ngửa nhiều hơn số mặt sấp.
+  </strong>
+</div>
+
+```{r}
+rm(list = ls())
+PhepThu = function() sample(x = c("Ngửa", "Sấp"), size = 3, replace = TRUE)
+A = function(){
+  x = PhepThu()
+  return (sum(x == "Ngửa") > sum(x == "Sấp"))
+}
+n = 10000
+QuanTrac = replicate(n, A())
+P = mean(QuanTrac)
+cat("Xác suất để số mặt ngửa nhiều hơn số mặt sấp là: ", P, "\n")
+```
+
+## **Bài tập 2.10**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Tung hai con xúc sắc. Tính xác suất để một con cho số nút gấp đôi con còn lại.
+  </strong>
+</div>
+```{r}
+rm(list = ls())
+PhepThu = function() sample(x = 1:6, size = 2, replace = TRUE)
+A = function(){
+  res = PhepThu()
+  condition = (res[1] == 2 * res[2]) | (res[2] == 2 * res[1])
+  return (condition)
+}
+n = 10000
+QuanTrac = replicate(n, A())
+P = mean(QuanTrac)
+cat("Xác suất để một con cho số nút gấp đôi con còn lại là: ", P, "\n")
+```
+
+## **Bài tập 2.11**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Có hai hộp chứa giấy, mỗi hộp chứa số từ 1 đến 8. Rút ngẫu nhiên 1 mẫu giấy từ mỗi 
+  hộp. Tính xác suất để tổng hai số bằng 8.
+  </strong>
+</div>
+```{r}
+rm(list = ls())
+PhepThu = function() sample(x = 1:8, size = 2, replace = TRUE)
+A = function(){
+  res = PhepThu()
+  return (res[1] + res[2] == 8)
+}
+n = 10000
+QuanTrac = replicate(n, A())
+P = mean(QuanTrac)
+cat("Xác suất để tổng hai lần rút bằng 8 là: " , P, "\n")
+```
+
+## **Bài tập 2.12**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Chọn ngẫu nhiên 5 sinh viên từ lớp có 10 nam và 10 nữ. Tính xác suất để cả 5
+  sinh viên đều là nam.
+  </strong>
+</div>
+```{r}
+rm(list = ls())
+PhepThu = function() sample(c(rep("Nam", 10), rep("Nữ", 10)), size = 5, replace = FALSE)
+A = function() sum(PhepThu() == "Nam") == 5
+n = 10000
+QuanTrac = replicate(n, A())
+P = mean(QuanTrac)
+cat("Xác suất để cả 5 sinh viên đều là Nam là: ", P, "\n")
+```
+
+## **Bài tập 2.13**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Chọn ngẫu nhiên 5 sinh viên từ lớp có 10 nam và 10 nữ. Tính xác suất để có đúng
+  4 sinh viên là nữ
+  </strong>
+</div>
+```{r}
+rm(list = ls())
+PhepThu = function() sample(x = c(rep("Nam", 5), rep("Nữ", 5)), size = 5, replace = FALSE)
+A = function() sum(PhepThu() == "Nữ") == 4
+n = 10000
+QuanTrac = replicate(n, A())
+P = mean(QuanTrac)
+cat("Xác suất để có đúng 4 sinh viên là nữ là: ", P, "\n")
+```
+
+## **Bài tập 2.14**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Tung hai con xúc xắc. Tính xác suất để hiệu số nút bằng 4.
+  </strong>
+</div>
+```{r}
+rm(list = ls())
+PhepThu = function() sample(x = 1:6, size = 2, replace = TRUE)
+A = function(){
+  res = PhepThu()
+  return (abs(res[1] - res[2]) == 4)
+}
+n = 10000
+QuanTrac = replicate(n, A())
+P = mean(QuanTrac)
+cat("Xác suất để hiệu số nút bằng 4 là: ", P, "\n")
+```
+
+## **Bài tập 2.15**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Tung hai con xúc xắc. Tính xác suất để tổng số nút ít nhất là 10, biết rằng có ít 
+  nhất 1 mặt là 6
+  </strong>
+</div>
+```{r}
+PhepThu = function() sample(x = 1:6, size = 2, replace = TRUE)
+# A: tổng só nút ít nhất là 10
+# B: có ít nhất 1 mặt là 6
+AB = function(){
+  res = PhepThu()
+  condition1 = sum(res) >= 10
+  condition2 = sum(res == 6) >= 1
+  return (condition1 & condition2)
+}
+B = function() sum(PhepThu() == 6) >= 1
+n = 10000
+QuanTracAB = replicate(n, AB())
+QuanTracB = replicate(n, B())
+
+P_AB = mean(QuanTracAB)
+P_B = mean(QuanTracB)
+P = P_AB / P_B
+cat("Xác suất để tổng số nút ít nhất là 10, biết rằng có ít nhất 1 mặt là 6 là: ", P, "\n")
+```
+
+## **Bài tập 2.16**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Tung một đồng xu 3 lần. Đặt các biến cố sau: <br>
+  <strong> A = "Số mặt ngửa bằng đúng 2" </strong><br>
+  <strong> B = "Số mặt ngửa ít nhất là 2" </strong><br>
+  <strong> C = "Lần tung thứ 2 được mặt ngửa" </strong><br>
+  <strong> D = "Số mặt ngửa nhiều hơn số mặt sấp" </strong><br>
+  <strong> E = "Các lần tung đều có cùng mặt" </strong><br>
+  <strong> Hãy mô phỏng các biến cố trên có xảy ra hay không khi thực hiên phép thử.
+  </strong>
+</div>
+```{r}
+rm(list = ls())
+PhepThu = function() sample(x = c("Ngửa", "Sấp"), size = 3, replace = TRUE)
+A = function() sum(PhepThu() == "Ngửa") == 2
+B = function() sum(PhepThu() == "Ngửa") >= 2
+C = function() PhepThu()[2] == "Ngửa"
+D = function(){
+  res = PhepThu()
+  condition = sum(res == "Ngửa") > sum(res == "Sấp")
+  return (condition)
+}
+E = function(){
+  res = PhepThu()
+  return (res[1] == res[2] & res[2] == res[3])
+}
+cat("Biến cố A có xảy ra hay không. Nếu có(TRUE), nếu không (FALSE) -> Đáp án: ", A(), "\n")
+cat("Biến cố B có xảy ra hay không. Nếu có(TRUE), nếu không (FALSE) -> Đáp án: ", B(), "\n")
+cat("Biến cố C có xảy ra hay không. Nếu có(TRUE), nếu không (FALSE) -> Đáp án: ", C(), "\n")
+cat("Biến cố D có xảy ra hay không. Nếu có(TRUE), nếu không (FALSE) -> Đáp án: ", D(), "\n")
+cat("Biến cố E có xảy ra hay không. Nếu có(TRUE), nếu không (FALSE) -> Đáp án: ", E(), "\n")
+```
+
+## **Bài tập 2.17**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Tung hai con xúc xắc. Tính xác suất để một con xúc xắc cho số nút gấp đôi con xúc
+  xắc kia.
+  </strong>
+</div>
+```{r}
+rm(list = ls())
+PhepThu = function() sample(x = 1:6, size = 2, replace = TRUE)
+A = function(){
+  res = PhepThu()
+  return ((res[1] == res[2] * 2) | (res[2] == res[1] * 2))
+}
+n = 10000
+QuanTrac = replicate(n, A())
+P = mean(QuanTrac)
+cat("Xác suất để một con xúc xắc cho số nút gấp đôi con xúc xắc kia là: ", P, "\n")
+```
+
+## **Bài tập 2.18**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Tung hai con xúc xắc. Tính xác suất để hiệu số nút bằng 0. Tính xác suất để hiệu
+  số nút bằng 4.
+  </strong>
+</div>
+```{r}
+rm(list = ls())
+PhepThu = function() sample(x = 1:6, size = 2, replace = TRUE)
+# Hiệu số nút bằng 0
+A = function(){
+  res = PhepThu()
+  return (res[1] == res[2])
+}
+B = function(){
+  res = PhepThu()
+  return(abs(res[1] - res[2]) == 4)
+}
+n = 10000
+QuanTracA = replicate(n, A())
+QuanTracB = replicate(n, B())
+P_A = mean(QuanTracA)
+P_B = mean(QuanTracB)
+cat("Xác suất để hiệu số nút bằng 0 là: ", P_A, "\n")
+cat("Xác suất để hiệu số nút bằng 4 là: ", P_B, "\n")
+```
+
+## **Bài tập 2.19**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Có hai hộp, mỗi hộp chứa 8 mẫu giấy ghi các số từ 1 đến 8. Rút ngẫu nhiên một
+  mẫu giấy từ hộp. <br>
+  <strong> (a) Tính xác suất để tổng hai số nhận được bằng 8 </strong><br>
+  <strong> (b) Tính xác suất để ít nhất một trong hai số là số 2. </strong><br>
+  </strong>
+</div>
+```{r}
+rm(list = ls())
+PhepThu = function() sample(x = 1:8, size = 2, replace = TRUE)
+A = function() sum(PhepThu()) == 8
+B = function() sum(PhepThu() == 2) >= 1
+n = 10000
+QuanTracA = replicate(n, A())
+QuanTracB = replicate(n, B())
+P_A = mean(QuanTracA)
+P_B = mean(QuanTracB)
+cat("Xác suất để tổng hai số nhận được bằng 8 là: ", P_A, "\n")
+cat("Xác suất để ít nhất một trong hai số là số 2 là: ", P_B, "\n")
+```
+
+## **Bài tập 2.20, 2.21, 2.22, 2.23**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Giả sử tỷ lệ màu của các viên kẹ M&M là:<br>
+  <strong> Vàng(0.14), Đỏ(0.13), Cam(0.2), Nâu(0.12), Xanh lá(0.2), Xanh dương(0.21)</strong><br>
+  <strong> (a) Xác suất để chọn ngẫu nhiên 1 viên kẹo thì không có màu xanh.</strong><br>
+  <strong> (b) Xác suất để chọn ngẫu nhiên 1 viên kẹo thì được màu đỏ, cam, hoặc vàng.</strong><br>
+  <strong> (c) Xác suất để chọn ngẫu nhiên 4 viên kẹo thì có ít nhất 1 màu xanh dương.</strong><br>
+  <strong> (a) Xác suất để chọn ngẫu nhiên 6 viên kẹo thì được tất cả 6 màu khác nhau.</strong><br>
+  </strong>
+</div>
+```{r}
+rm(list = ls())
+mau = c("Vang", "Do", "Cam", "Nau", "Xanh la", "Xanh duong")
+p = c(0.14, 0.13, 0.2, 0.12, 0.2, 0.21)
+PhepThu = function(n) {
+  sample(mau, size = n, replace = TRUE, prob = p)
+}
+A = function() {
+  x = PhepThu(1)
+  x != "Xanh la" & x != "Xanh duong"
+}
+B = function() PhepThu(1) %in% c("Do", "Cam", "Vang")
+C = function() any(PhepThu(4) == "Xanh duong")
+D = function() length(unique(PhepThu(6))) == 6
+
+Prob = function(BienCo, N = 10000) mean(replicate(N, BienCo()))
+
+res1 = Prob(A)  # Question a
+res2 = Prob(B)  # Question b
+res3 = Prob(C)  # Question c
+res4 = Prob(D)  # Question d
+cat("Xác suất để chọn ngẫu nhiên 1 viên kẹo thì không có màu xanh là: ", res1, "\n")
+cat("Xác suất để chọn ngẫu nhiên 1 viên kẹo thì được màu đỏ, cam, hoặc vàng là: ", res2, "\n")
+cat("Xác suất để chọn ngẫu nhiên 4 viên kẹo thì có ít nhất 1 màu xanh dương là: ", res3, "\n")
+cat("Xác suất để chọn ngẫu nhiên 6 viên kẹo thì được tất cả 6 màu khác nhau là: ", res4, "\n")
+```
+
+## **Bài tập 2.24**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> (Tương tự bài tập 2.6). Một lớp học có 10 sinh viên nam, và 10 sinh viên nữ. Chọn
+  ngẫu nhiên 5 sinh viên lên bảng làm bài. Tính xác suất <br>
+  <strong> (a) Cả 5 sinh viên là nam. </strong><br>
+  <strong> (b) Có đúng 4 sinh viên là nữ </strong><br>
+  </strong>
+</div>
+```{r}
+rm(list = ls())
+PhepThu = function() sample(c(rep("Nam", 10), rep("Nữ", 10)), size = 5, replace = FALSE)
+A = function() sum(PhepThu() == "Nam") == 5
+B = function() sum(PhepThu() == "Nữ") == 4
+n = 10000
+QuanTracA = replicate(n, A())
+QuanTracB = replicate(n, B())
+P_A = mean(QuanTracA)
+P_B = mean(QuanTracB)
+cat("Xác suất cả 5 sinh viên được chọn là 5 là: ", P_A, "\n")
+cat("Xác suất có đúng 4 sinh viên là nữ là: ", P_B, "\n")
+```
+
+## **Bài tập 2.25**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Tính xấp xỉ số pi bằng phương pháp mô phỏng
+  </strong>
+</div>
+```{r}
+rm(list = ls())
+PhepThu = function() runif(2, min = -1, max = 1)
+BienCo = function() sum(PhepThu()^2) <= 1
+n = 10000
+QuanTrac = replicate(n, BienCo())
+P = mean(QuanTrac)
+res = P * 4
+cat("Xấp xỉ số pi: ", res, "\n")
+```
+
+## **Bài 2.26**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Trong một nhóm gồm 30 người được chọn ngẫu nhiên, tính xác suất để có ít nhất 2 
+  người cùng ngày sinh nhật. Giả sử mỗi ngày trong năm đều có xác suất bằng nhau và không có
+  năm nhuận.
+  </strong>
+</div>
+```{r}
+rm(list = ls())
+PhepThu = function() sample(x = 1:365, size = 30, replace = TRUE)
+A = function() anyDuplicated(PhepThu()) > 0
+n = 10000
+QuanTrac = replicate(n, A())
+P = mean(QuanTrac)
+cat("Xác suất để có 2 người cùng ngày sinh là: ", P, "\n")
+```
+
+## **Bài tập 2.27**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Tung hai con xúc xắc, tính số nút để tổng số nút lớn hơn 10, biết rằng ít nhất
+  1 con ra mặt 6
+  </strong>
+</div>
+```{r}
+rm(list = ls())
+PhepThu = function() sample(x = 1:6, size = 2, replace = TRUE)
+# A: tổng só nút ít nhất là 10
+# B: có ít nhất 1 mặt là 6
+AB = function(){
+  res = PhepThu()
+  condition1 = sum(res) >= 10
+  condition2 = sum(res == 6) >= 1
+  return (condition1 & condition2)
+}
+B = function() sum(PhepThu() == 6) >= 1
+n = 10000
+QuanTracAB = replicate(n, AB())
+QuanTracB = replicate(n, B())
+
+P_AB = mean(QuanTracAB)
+P_B = mean(QuanTracB)
+P = P_AB / P_B
+cat("Xác suất để tổng số nút ít nhất là 10, biết rằng có ít nhất 1 mặt là 6 là: ", P, "\n")
+```
+
+## **Bài tập 2.28**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Trong trò chơi Monty hall, người chơi chọn một trong ba cánh cửa. Sau đó, MC mở
+  một cánh cửa có dê. Người chơi đổi cửa. Tính xác suất để người chơi thắng xe hơi nếu đổi cửa
+  </strong>
+</div>
+```{r}
+rm(list = ls())
+Experiment = function(){
+  CacCua = 1:3
+  CuaCoXe = sample(CacCua, 1)
+  CuaChonBanDau = sample(CacCua, 1)
+  
+  CuaChuaChon = CacCua[CacCua != CuaChonBanDau]
+  CuaCoDe = CuaChuaChon[CuaChuaChon != CuaCoXe]
+  CuaMo = CuaCoDe[sample(1:length(CuaCoDe), 1)]
+  DoiCua = CacCua[CacCua != CuaChonBanDau & CacCua != CuaMo]
+  
+  GiuNguyen = (CuaChonBanDau == CuaCoXe)
+  CuaDoi = (DoiCua == CuaCoXe)
+  return (c(GiuNguyen, CuaDoi))
+}
+n = 10000
+ketqua = replicate(n, Experiment())
+P = mean(ketqua[2, ])
+cat("Xác suất đổi cửa mà trúng xe hơi là: ", P, "\n")
+```
+
+## **Bài tập 2.29**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Giả sử tỷ lệ màu của kẹo M&M như sau: Vàng 14%, Đỏ 13%, Cam 20%, Nâu 12%, Xanh lá 20%, Xanh dương 21%. Tính xác suất để chọn ngẫu nhiên 4 viên kẹp thì có ít nhất một viên kẹo màu xanh dương
+  </strong>
+</div>
+```{r}
+Keo = c("Vàng", "Đỏ", "Cam", "Nâu", "Xanh lá", "Xanh dương")
+p = c(0.14, 0.13, 0.2, 0.12, 0.2, 0.21)
+PhepThu = function() sample(Keo, size = 4, replace = FALSE, prob = p)
+A = function(){
+  sum(PhepThu() == "Xanh dương") >= 1
+}
+n = 10000
+QuanTrac = replicate(n, A())
+P = mean(QuanTrac)
+cat("Xác suất để có ít nhất 1 viên kẹo màu xanh dương là: ", P)
+```
+
+## **Bài tập 2.30**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Từ một bộ bài 52 lá, rút ngẫu nhiên 2 lá. Tính xác suất để hai lá thuộc cùng một chất(cơ, rô, chuồn, bích).
+  </strong>
+</div>
+```{r}
+rm(list = ls())
+Experiment = function(){
+  So = c("A", 2:10, "J", "Q", "K")
+  Chat = c("Cơ", "Rô", "Chuồn", "Bích")
+
+  So = rep(So, time = 4)
+  Chat = rep(Chat, each = 13)
+  BoBai = paste(So, Chat, sep = " ")
+  x = sample(BoBai, size = 2, replace = FALSE)
+  return (x)
+}
+A = function(){
+  x = Experiment()
+  a = strsplit(x[1], " ")[[1]][2]
+  b = strsplit(x[2], " ")[[1]][2]
+  return (a == b)
+}
+n = 10000
+QuanTrac = replicate(n, A())
+P = mean(QuanTrac)
+cat("Xác suất rút được 2 lá bài cùng chất là: ", P)
+```
+
+## **Bài tập 2.31**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Gieo 2 xúc xắc cân đối đồng chất. Đặt các biến cố: <br>
+  <strong> - A: Tổng số chấm bằng 7 </strong><br>
+  <strong> - B: có ít nhất 1 mặt 6 chấm </strong><br>
+  <strong> - C: Tổng số chấm là số chẵn </strong><br>
+  <strong> (a) Tính P(A), P(B), P(C)</strong><br>
+  <strong> (b) Tính P($A \cup B$), P($A \cap B$), P($A^c$).</strong><br>
+  <strong> (c) Tính P($A \setminus C$) với A: tổng = 7, C: tổng chẵn.
+  </strong>
+</div>
+```{r}
+rm(list = ls())
+# Gieo 2 xúc xắc cân đối đồng chất
+PhepThu = function() sample(1:6, size = 2, replace = TRUE)
+# A là biến cố tổng số chấm bằng 7
+A = function() sum(PhepThu()) == 7
+# B là biến cố có ít nhất 1 mặt 6 chấm
+B = function() sum(PhepThu() == 6) >= 1
+# C là biến cố tổng số chấm là số chẵn
+C = function() sum(PhepThu()) %% 2 == 0
+# A hợp B là: Có ít nhất 1 mặt 6 chấm hoặc tổng số chấm bằng 7
+AhopB = function(){
+  c = PhepThu()
+  condition = (sum(c == 6) >= 1 | (sum(c) == 7))
+  return (condition)
+}
+# A giao B: có ít nhất 1 mặt 6 chấm và tổng số chấm bằng 7
+AGiaoB = function(){
+  c = PhepThu()
+  condition = (sum(c == 6) >= 1 & (sum(c) == 7))
+  return (condition)
+}
+# Bù của A: Tổng số chấm khác 7
+BuA = function() sum(PhepThu()) != 7
+# P(A|C) = P(AC)/P(C)
+AgiaoC = function(){
+  c = PhepThu()
+  condition = (sum(c) == 7 & (sum(c) %% 2 == 0))
+  return (condition)
+}
+# Tính P(A), P(B), P(C)
+n = 10000
+QuanTracA = replicate(n, A())
+QuanTracB = replicate(n, B())
+QuanTracC = replicate(n, C())
+QuanTracAHopB = replicate(n, AhopB())
+QuanTracAGiaoB = replicate(n, AGiaoB())
+QuanTracBuA = replicate(n, BuA())
+QuanTracAgiaoC = replicate(n, AgiaoC())
+
+P_a = mean(QuanTracA)
+P_b = mean(QuanTracB)
+P_c = mean(QuanTracC)
+
+P_AgiaoB = mean(QuanTracAGiaoB)
+P_AHopB = mean(QuanTracAHopB)
+P_BuA = mean(QuanTracBuA)
+P_AgiaoC = mean(QuanTracAgiaoC)
+P_AdieuKienC = P_AgiaoC / P_c
+# Câu a:
+cat("Xác suất của biến cố A là: ", P_a, "\n")
+cat("Xác suất của biến cố B là: ", P_b, "\n")
+cat("Xác suất của biến cố C là: ", P_c, "\n")
+# Câu c
+cat("Xác suất của A hợp B là: ", P_AHopB, "\n")
+cat("Xác suất của A giao B là: ", P_AgiaoB, "\n")
+cat("Xác suất của phần bù của A là: ", P_BuA, "\n")
+# Câu d
+cat("Xác suất của A, điều kiện C là: ", P_AdieuKienC, "\n")
+```
+
+## **Bài tập 2.32**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Gieo hai xúc xắc cân đối đồng chất. Gọi A = {max(D1, D2) = 6}, C = {D1 + D2 >= 9}
+  Tính P($A \setminus C$). So sánh với mô phỏng.
+  </strong>
+</div>
+```{r}
+rm(list = ls())
+PhepThu = function() sample(1:6, size = 2, replace = TRUE)
+A = function() max(PhepThu()) == 6
+C = function() sum(PhepThu()) >= 9
+AC = function(){
+  x = PhepThu()
+  return (max(x) == 6 & sum(x) >= 9)
+}
+n = 10000
+QuanTracAC = replicate(n, AC())
+QuanTracC = replicate(n, C())
+P_AC = mean(QuanTracAC)
+P_C = mean(QuanTracC)
+P = P_AC / P_C
+cat("Xác suất là: ", P, "\n")
+```
+
+## **Bài tập 2.33**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Hộp có 6 bi đỏ, 4 bi xanh. Lấy ngẫu nhiên 3 bi không hoàn lại. Gọi A là lấy được đúng 2 bi đỏ. B là bi đầu tiên là bi đỏ. Tính P($A \setminus B$)
+  </strong>
+</div>
+```{r}
+rm(list = ls())
+PhepThu = function() sample(c(rep("Đỏ", 6), rep("Xanh", 4)), size = 3, replace = FALSE)
+AB = function(){
+  x = PhepThu()
+  return (sum(x == "Đỏ") == 2 & x[1] == "Đỏ")
+}
+B = function() PhepThu()[1] == "Đỏ"
+n = 10000
+QuanTracAB = replicate(n, AB())
+QuanTracB = replicate(n, B())
+P_AB = mean(QuanTracAB)
+P_B = mean(QuanTracB)
+P = P_AB / P_B
+cat("Xác suất là: ", P)
+```
+
+## **Bài tập 2.34**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Có 3 đồng xu, với xác suất được mặt sấp lần lượt là:  p1 = 0.5, p2 = 0.6, p3 = 0.8
+  Chọn ngẫu nhiên 1 đồng xu, tung 5 lần được đúng 4 mặt ngửa. Tính xác suất đồng xu được chọn 
+  là đồng xu số 3
+  </strong>
+</div>
+```{r}
+rm(list = ls())
+Coin = c("Xu 1", "Xu 2", "Xu 3")
+p = c(0.5, 0.6, 0.8)
+MoPhongMotLan = function(){
+  x = sample(Coin, 1)
+  p_ngua = if (x == "Xu 1") 1 - 0.5 else if(x == "Xu 2") 1 - 0.6 else 1 - 0.8
+  ketquatung = sample(c("Ngửa", "Sấp"), size = 5, replace = TRUE, prob = c(p_ngua, 1 - p_ngua))
+  SoMatNgua = sum(ketquatung == "Ngửa")
+  LaBonMatNgua = (SoMatNgua == 4)
+  LaDongXuBa = (x == "Xu 3")
+  return (c(LaBonMatNgua, LaDongXuBa & LaBonMatNgua))
+}
+n = 10000
+QuanTrac = replicate(n, MoPhongMotLan())
+P_AB = mean(QuanTrac[2, ])
+P_B = mean(QuanTrac[1, ])
+P = P_AB / P_B
+cat("Xác suất đồng xu được chọn là đồng xu 3 biết tung 5 lần thì được 4 lần ngửa: ", P)
+```
+
+## **Bài tập 2.35**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Một hệ thống có 10 linh kiện hoạt động độc lập. Xác suất 1 linh kiện hỏng trong ngày
+  là 0.03. Gọi A là trong ngày có ít nhất 1 linh kiện hỏng.<br>
+  <strong> Tính P(A) bằng biến cố bù </strong><br>
+  <strong> Lặp lại với p = 0.001 </strong><br>
+  </strong>
+</div>
+```{r}
+rm(list = ls())
+A = function(){
+  x = sample(c("Hoạt động", "Hỏng"), size = 10, replace = TRUE, prob = c(1 - 0.03, 0.03))
+  return (sum(x == "Hỏng") >= 1)
+}
+B = function(){
+  x = sample(c("Hoạt động", "Hỏng"), size = 10, replace = TRUE, prob = c(1 - 0.01, 0.01))
+  return (sum(x == "Hỏng") >= 1)
+}
+n = 10000
+QuanTracA = replicate(n, A())
+QuanTracB = replicate(n, B())
+P_A = mean(QuanTracA)
+P_B = mean(QuanTracB)
+cat("Xác suất ít nhất 1 linh kiện hỏng tính với p = 0.03 là: ", P_A, "\n")
+cat("Xác suất ít nhất 1 linh kiện hỏng tính với p = 0.001 là: ", P_B, "\n")
+```
+
+## **Bài tập 2.36**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Chọn ngẫu nhiên n = 30 người(giả sử sinh nhật độc lập và mỗi năm có 365 ngày). Gọi A
+  là biến cố tồn tại ít nhất 3 người cùng ngày sinh. Tính P(A)
+  </strong>
+</div>
+```{r}
+rm(list = ls())
+PhepThu = function() sample(x = 1:365, size = 30, replace = TRUE)
+A = function(){
+  x = PhepThu()
+  max(table(x)) >= 3
+}
+n = 10000
+QuanTrac = replicate(n, A())
+P = mean(QuanTrac)
+cat("Xác suất có ít nhất 3 người cùng ngày sinh trong 30 người là: ", P)
+```

@@ -1,0 +1,170 @@
+---
+title: "Difficult Exercise midterm"
+author: "25120357 - Nguyễn Văn Khánh"
+date: "2026-11-21"
+output: html_document
+---
+# **Hard Exercise**
+## **Bài tập 1**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Bài cuối(Bài toán Monty Hall tổng quát): Trong 1 trò chơi truyền hình ở Mỹ, người chơi đứng trước n cánh cửa. Phía sau một cánh cửa là một chiếc xe hơi, phía sau n−1 cánh cửa còn lại là các con dê. Đầu tiên người chơi chọn ngẫu nhiên một trong n cánh cửa. Sau đó, người dẫn chương trình sẽ mở k(điều kiện 1 ≤ k ≤n−2)trong n−1 cánh cửa còn lại có con dê phía sau. Lúc này người chơi sẽ đưa ra quyết định có thay đổi lựa chọn ban đầu hay không. Dùng mô phỏng để tính xác suất chọn được cửa có xe hơi trong hai khả năng quyết định của người chơi.
+  </strong>
+</div>
+```{r}
+Experiment = function(n, k){
+  CacCua = 1:n
+  CuaCoXe = sample(CacCua, 1)
+  CuaChon = sample(CacCua, 1)
+  
+  CuaChuaChon = CacCua[CacCua != CuaChon]
+  CuaCoDe = CuaChuaChon[CuaChuaChon != CuaCoXe]
+  CuaMo = CuaCoDe[sample(1:length(CuaCoDe), k)]
+  
+  CuaDoi = CacCua[CacCua != CuaChon & CacCua != CuaMo]
+  QuyetDinhCuaDoi = CuaDoi[sample(1:length(CuaDoi), 1)]
+  
+  GiuNguyen = (CuaChon == CuaCoXe)
+  DoiCua = (QuyetDinhCuaDoi == CuaCoXe)
+  return (c(GiuNguyen, DoiCua))
+}
+# Test với trường hợp nổi tiếng có 3 cánh cửa gồm 1 cửa chứa xe và 2 cửa chứa dê
+n = 10000
+QuanTrac = replicate(n, Experiment(3, 1))
+P1 = mean(QuanTrac[1, ])
+P2 = mean(QuanTrac[2, ])
+P1
+P2
+```
+
+## **Bài tập 2**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Một cây que được bẻ ngẫu nhiên thành 3 khúc. Tính xác suất để 3 khúc đó tạo thành 1 tam giác
+  </strong>
+</div>
+```{r}
+PhepThu = function(){
+  res = runif(2, min = 0, max = 1)
+  if (res[1]> 0 & res[2] > res[1] & res[2] < 1){
+    return (res)
+  }
+  else PhepThu()
+}
+A = function(){
+  res = PhepThu()
+  L1 = res[1]
+  L2 = res[2] - res[1]
+  L3 = 1 - res[2]
+  return ((L1 + L2 > L3) & (L1 + L3 > L2) & (L2 + L3 >L1))
+}
+BienCoA = replicate(10000, A())
+P = mean(BienCoA)
+cat("Xác suất để một cây que được bẻ ngẫu nhiên thành 3 khúc tạo thành tam giác là: ", P)
+```
+
+## **Bài tập 3**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Chọn ngẫu nhiên ba điểm trên một đường tròn. Tính xác suất ba điểm đó nằm trong cùng một nửa đường tròn.
+  </strong>
+</div>
+```{r}
+rm(list = ls())
+PhepThu = function(){
+  res = runif(3, min = 0, max = 2*pi)
+  if (all(res != 2*pi)){
+    return (res)
+  }
+  else PhepThu()
+}
+
+A = function(){
+  res = PhepThu()
+  res = sort(res)
+  d1 = res[2] - res[1]
+  d2 = res[3] - res[2]
+  d3 = 2*pi - res[3] + res[1]
+  return (d1 >= pi | d2 >= pi | d3 >= pi)
+}
+BienCoA = replicate(10000, A())
+P.A = mean(BienCoA)
+cat("Xác suất để ba điểm chọn được nằm trên một đường tròn là: ", P.A)
+```
+
+## **Bài tập 4**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Cho một hình tròn bán kính 1. Chọn ngẫu nhiên một điểm trong hình tròn. Tính xác suất điểm đó nằm trong hình vuông nội tiếp hình tròn.
+  </strong>
+</div>
+```{r}
+rm(list = ls())
+PhepThu = function(){
+  res = runif(2, min = -1, max = 1)
+  if (res[1]^2 + res[2]^2 <= 1){
+    return (res)
+  }
+  else PhepThu()
+}
+A = function(){
+  res = PhepThu()
+  return (abs(res[1]) <= 1/sqrt(2) & abs(res[2]) <= 1/sqrt(2))
+}
+BienCoA = replicate(10000, A())
+P.A = mean(BienCoA)
+cat("Xác suất để điểm đó nằm trong hình vuông nội tiếp hình tròn là: ", P.A)
+```
+
+## **Bài tập 5**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Một bộ bài có 52 lá bài gồm 13 quân bài K,Q,J,10,9,8,7,6,5,4,3,2,A, mỗi quân bài có 4 chất cơ, rô, chuồn và bích. Rút ngẫu nhiên 5 lá bài từ bộ bài không hoàn lại. Tính xác suất trong 5 lá có đúng một đôi (một cặp bài cùng quần bài, ba lá còn lại khác quân bài).
+  </strong>
+</div>
+```{r}
+rm(list = ls())
+PhepThu = function(){
+  So = c("A", 2:10, "J", "Q", "K")
+  Chat = c("Cơ", "Rô", "Chuồn", "Bích")
+  
+  So = rep(So, each = 4)
+  Chat = rep(Chat, times = 13)
+  BoBai = paste(So, Chat, sep = " ")
+  x = sample(BoBai, size = 5, replace = FALSE)
+  return (x)
+}
+A = function(){
+  res = PhepThu()
+  So = character()
+  for (i in 1:length(res)){
+    LaBai = strsplit(res[i], " ")[[1]][1]
+    So = append(So, LaBai)
+  }
+  x = length(unique(So))
+  return (x == 4)
+}
+BienCoA = replicate(10000, A())
+P.A = mean(BienCoA)
+cat("Xác suất có đúng 1 đôi trong 5 lá vừa rút là: ", P.A)
+```
+
+## **Bài tập 6**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Chọn ngẫu nhiên 5 số từ tập hợp các số nguyên từ 1 đến 20, không hoàn lại. Tính xác suất có ít nhất hai số liên tiếp.
+  </strong>
+</div>
+```{r}
+rm(list = ls())
+PhepThu = function() sample(x = 1:20, size = 5, replace = FALSE)
+A = function(){
+  x = PhepThu()
+  x = sort(x)
+  n = length(x)
+  cnt = 0
+  for (i in 1:4){
+    if (x[i + 1] - x[i] == 1){
+      return (TRUE)
+    }
+  }
+  return (FALSE)
+}
+BienCoA = replicate(10000, A())
+P.A = mean(BienCoA)
+cat("Xác suất có ít nhất 2 số liên tiếp là: ", P.A)
+```

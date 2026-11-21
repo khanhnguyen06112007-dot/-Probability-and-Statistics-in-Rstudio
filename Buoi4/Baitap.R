@@ -115,7 +115,7 @@ hist(x)
 ### Bai tap 4.13
 # Tính P(X > 5) với X~P(2)
 rm(list = ls())
-p = ppois(5, 2, lower.tail = FALSE)
+p = ppois(4, 2, lower.tail = FALSE)
 cat(p)
 
 

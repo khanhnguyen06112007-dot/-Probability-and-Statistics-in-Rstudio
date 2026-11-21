@@ -1,0 +1,250 @@
+---
+title: "Ôn thi giữa kì xác suất thống kê (Chương 4)"
+author: "25120357 - Nguyễn Văn Khánh"
+date: "2026-11-21"
+output: html_document
+---
+# **Chương 4: Một số phân phối xác suất thông dụng**
+## **Bài tập 4.1, 4.2**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Vẽ một biểu đồ cột của hàm xác suất của phân phối siêu bội với N = 100, M = 25, 
+  và n = 15. Tính $P(5 <= X <= 12)$.
+  </strong>
+</div>
+```{r}
+rm(list = ls())
+N = 100
+M = 25
+n = 15
+x = 0:n
+p = dhyper(x, M, N - M, n)
+barplot(p, x, ylab = "P(X = x)")
+Px = phyper(12, M, N - M, n) - phyper(5, M, N - M, n)
+cat(Px)
+```
+
+## **Bài tập 4.3**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> 
+  (a) Sử dụng lệnh $curve(dexp(x, 0.6), 0, 10)$ để vẽ hàm mật độ xác suất của phân phối mũ
+  với tham số lamba = 0.6<br>
+  (b) Đối với đồ thị nhận được vẽ hàm mật độ xác suất của phân phối mũ với lambda = 0.3 <br>
+  (c) Sử dụng hàm phân phối tích lũy để tính diện tích bên dưới của hai hàm mật độ.
+  </strong>
+</div>
+```{r}
+# a)
+curve(dexp(x, 0.6), 0, 10, col = "blue", ylab = "Density")
+# b)
+curve(dexp(x, 0.3), 0, 10, add = TRUE, col = "red", ylab = "Density")
+legend("topright", legend = c("lambda = 0.6", "lambda = 0.3"), col = c("blue", "red"), lwd = 2)
+# c)
+I1 = pexp(10, 0.6) - pexp(0, 0.6)
+I2 = pexp(10, 0.3) - pexp(0, 0.3)
+I1
+I2
+```
+
+## **Bài tập 4.4**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Vẽ hàm xác suất của biến $X$~$P(1)$ với x thuộc {0,..,8}
+  </strong>
+</div>
+```{r}
+x = 0:8
+plot(x, dpois(x, 1),type = "h", main = "X~P(1)")
+```
+
+## **Bài tập 4.5**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Vẽ đồ thị hàm mật độ xác suất của biến X ~ X^2(3) với x thuộc [0, 10]
+  </strong>
+</div>
+```{r}
+curve(dchisq(x, 3), from = 0, to = 10)
+```
+
+## **Bài tập 4.6**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Chia cửa sổ đồ thị thành 2 phần trên và dưới.<br>
+  Trong phần trên, vẽ đồ thị của hàm xác suất của X ~ B(50, 0.08), Lấy ylim = c(0, 0.25)<br>
+  Trong phần dưới, vẽ đồ thị của hàm xác suất của X ~ P(4) với x thuộc {0, ..., 50} với 
+  cùng lựa chọn ylim = c(0, 0.25)<br>
+  </strong>
+</div>
+```{r}
+rm(list = ls())
+par(mfrow = c(2, 1))
+plot(0:50, dbinom(0:50, 50, 0.08), type = "h", main = "X~B(50, 0.08)", ylim = c(0, 0.25))
+plot(0:50, dpois(0:50, 4), type = "h", main = "X~P(4)", ylim = c(0, 0.25))
+```
+
+## **Bài tập 4.7**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Vẽ đồ thị hàm mật độ X~B(50, 0.4) và thêm vào hàm mật độ Y~N(20, 12)
+  </strong>
+</div>
+```{r}
+rm(list = ls())
+plot(0:50, dbinom(0:50, 50, 0.4), type = "h", main = "X~B(50, 0.4)", col = "red")
+curve(dnorm(x, 20, sqrt(12)), add = TRUE, col = "blue")
+```
+
+## **Bài tập 4.8**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Tính P(X = 5) của X~B(10, 0.4) và của Y~B(10, 0.6)
+  </strong>
+</div>
+```{r}
+rm(list = ls())
+P1 = dbinom(5, 10, 0.4)
+P2 = dbinom(5, 10, 0.6)
+P1
+P2
+```
+
+## **Bài tập 4.9**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Tính P(4 <= X <= 8) với X~B(12, 0.5) 
+  </strong>
+</div>
+```{r}
+P = pbinom(8, 12, 0.5) - pbinom(3, 12, 0.5)
+P
+```
+
+## **Bài tập 4.10**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Vẽ đồ thị hàm mật độ X~N(5, 1) và Y~N(5, 2) trên cùng 1 trục
+  </strong>
+</div>
+```{r}
+curve(dnorm(x, 5, 1), col = "red", from = -2, to = 12)
+curve(dnorm(x, 5, sqrt(2)), col = "blue", from = -2, to = 12, add = TRUE)
+```
+
+## **Bài tập 4.11**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Tính phân vị mức 0.025 và 0.975 của X~N(0,1)
+  </strong>
+</div>
+```{r}
+Q1 = qnorm(0.025, 0, 1)
+Q2 = qnorm(0.975, 0, 1)
+Q1
+Q2
+```
+
+## **Bài tập 4.12**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Mô phỏng 1000 giá trị từ phân phối P(lambda = 3). Vẽ histogram.
+  </strong>
+</div>
+```{r}
+p = rpois(1000, 3)
+hist(p, col = "red")
+```
+
+## **Bài tập 4.13**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Tính P(X > 5) với X~P(2) 
+  </strong>
+</div>
+```{r}
+1 - ppois(4, 2)
+```
+
+## **Bài tập 4.14**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> So sánh phân phối mũ với lambda = 0.5, lambda = 1 bằng cách vẽ đồ thị hàm mật độ.
+  </strong>
+</div>
+```{r}
+rm(list = ls())
+curve(dexp(x, 0.5), from = 1, to = 10, col = "red")
+curve(dexp(x, 1), from = 1, to = 10, add = TRUE, col = "blue")
+```
+
+## **Bài tập 4.15**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Tính P(X <= 3) với X~E(0.2)
+  </strong>
+</div>
+```{r}
+pexp(3, 0.2)
+```
+
+## **Bài tập 4.16**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Mô phỏng 500 giá trị từ phân phối chuẩn N(100, 15). Tính tỷ lệ giá trị nằm trong 
+  khoảng [85, 115]
+  </strong>
+</div>
+```{r}
+x = rnorm(500, 100, sqrt(15))
+tylemophong = mean(x >= 85 & x <= 115)
+tylelythuyet = pnorm(115, 100, sqrt(15)) - pnorm(85, 100, sqrt(15))
+tylelythuyet
+tylemophong
+```
+
+## **Bài tập 4.17**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Tính phân vị mức 0.9 của X~X^2(5)
+  </strong>
+</div>
+```{r}
+qchisq(0.9, 5)
+```
+
+## **Bài tập 4.18**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Vẽ đồ thị hàm mật độ X~F(5, 10)
+  </strong>
+</div>
+```{r}
+curve(df(x, 5, 10), from = -2, to = 12)
+```
+
+## **Bài tập 4.19**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> So sánh phân phối nhị thức B(50, 0.1) với phân phối P(5) bằng đồ thị
+  </strong>
+</div>
+```{r}
+plot(0:50, dbinom(0:50, 50, 0.1), type = "h", col = "red")
+plot(0:50, dpois(0:50, 5), type = "h", col = "blue", add = TRUE)
+```
+
+## **Bài tập 4.20**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Tính xác suất P(X <= 2) với X~K(N = 100, M = 30, n = 10)
+  </strong>
+</div>
+```{r}
+phyper(2, 30, 70, 10)
+```
+
+## **Bài tập 4.21**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Mô phỏng 1000 giá trị từ phân phối chuẩn N(0, 1). Vẽ biểu đồ QQ
+  </strong>
+</div>
+```{r}
+x = rnorm(1000, 0, 1)
+qqnorm(x)
+```
+
+## **Bài tập 4.22**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Tạo một hàm trong R để tính P(a <= X <= b) cho bất kì phân phối chuẩn 
+  N(muy, sigma^2). Áp dụng thử với a = 1, b = 2, muy = 1.5, sigma = 0.3
+  </strong>
+</div>
+```{r}
+P = function(a, b, muy, sigma){
+  x = pnorm(b, muy, sigma) - pnorm(a, muy, sigma)
+  return (x)
+}
+P (1, 2, 1.5, 0.3)
+```

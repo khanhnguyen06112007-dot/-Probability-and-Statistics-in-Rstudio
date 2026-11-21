@@ -1,0 +1,212 @@
+---
+title: "Ôn thi giữa kì xác suất thống kê (Chương 3)"
+author: "25120357 - Nguyễn Văn Khánh"
+date: "2026-11-21"
+output: html_document
+---
+# **Chương 3: Biến ngẫu nhiên và vector ngẫu nhiên**
+## **Bài tập 3.1**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Biến ngẫu nhiên X, nhận các giá trị giữa 0 và 1, có hàm mật độ xác suất
+  $f(x) = 0.07 \cdot x^{-0.93}$  <br>
+  <strong> (a) Tính xác suất P(X <= 0.2) </strong><br>
+  <strong> (b) Kiểm tra $f(x)$ là hàm mật độ xác suất bằng cách tính diện tích dưới đường cong
+  từ 0 đến 1 </strong>
+  </strong>
+</div>
+```{r}
+rm(list = ls())
+f = function(x){
+  ifelse (x >= 0 & x <= 1, 0.07*x^(-0.93), 0)
+}
+P = integrate(function(x) f(x), lower = -Inf, upper = 0.2)$value
+I = integrate(function(x) f(x), lower = -Inf, upper = Inf)$value
+cat("P(X <= 2) = ", P , "\n")
+cat("Kiểm tra có phải là hàm mật độ xác suất không, I = ", I)
+```
+
+## **Bài tập 3.2**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Sử dụng lệnh $x = sample(1:5, 100, TRUE, c(0.1, 0.2, 0.4, 0.2, 0.1))$ để rút
+  một mẫu ngẫu nhiên từ cỡ 100 từ phân phối với hàm xác suất như trên. Vẽ biểu đồ cột của các xác suất thực nghiệm bằng lệnh table(x)/100
+  </strong>
+</div>
+```{r}
+rm(list = ls())
+x = sample(1:5, size = 100, replace = TRUE, prob = c(0.1, 0.2, 0.4, 0.2, 0.1))
+table(x)/100
+```
+
+## **Bài tập 3.3, 3.4**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Tạo một biến ngẫu nhiên rời rạc X nhận giá trị từ 1 đến 5 với xác suất tùy ý. Kiểm tra tổng xác suất có bằng 1 hay không. Vẽ biểu đồ cột cho phân phối này.
+</div>
+```{r}
+x = 1:5
+p = c(0.1, 0.2, 0.3, 0.3, 0.1)
+sum(p)
+barplot(p, names.arg = x, xlab = "X", ylab = "P(X)", main = "Bài tập 3.3, 3.4")
+```
+
+## **Bài tập 3.5**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Tính hàm phân phối F(x) tại x = 3 cho phân phối ở bài tập 3.3
+  </strong>
+</div>
+```{r}
+x = 1:5
+p = c(0.1, 0.2, 0.3, 0.3, 0.1)
+F = function(a) sum(p[x <= a])
+F(3)
+```
+
+## **Bài tập 3.6**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Vẽ đồ thị hàm phân phối $F(x)$ cho phân phối rời rạc ở Bài tập 3.3
+  </strong>
+</div>
+```{r}
+rm(list = ls())
+x = 1:5
+p = c(0.1, 0.2, 0.3, 0.3, 0.1)
+F = function(a) sum(p[x <= a])
+F = Vectorize(F)
+plot(stepfun(x, c(0, F(x))), main = "Bài tập 3.6", xlab = "x", ylab = "F(x)", col = "red")
+```
+
+## **Bài tập 3.7, 3.8, 3.9**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Tạo một biến ngẫu nhiên liên tục X có mật độ xác suất $f(x) = 2x$ trên đoạn
+  $[0, 1]$. Kiểm tra diện tích bên dưới đường cong. Tính xác suất $P(X <= 0.5)$. Vẽ đồ thị
+  hàm mật độ xác suất này. Tính phân vị mức 0.75 của hàm mật độ này.
+  </strong>
+</div>
+```{r}
+rm(list = ls())
+f = function(x) ifelse(x >= 0 & x <= 1, 2 * x, 0)
+F = function(a) integrate(function(x) f(x), lower = -Inf, upper = a)$value
+I = integrate(function(x) f(x), lower = -Inf, upper = Inf)$value
+P = integrate(function(x) f(x), lower = -Inf, upper = 0.5)$value
+cat("Kiểm tra I = ", I, "\n")
+cat("P(X <= 0.5) = ", P, "\n")
+curve(f(x), from = 0, to = 1)
+uniroot(function(x) F(x) - 0.75, c(0, 1))$root
+```
+
+## **Bài tập 3.11, 3.12, 3.13**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Tạo một mẫu ngẫu nhiên gồm 100 giá trị từ phân phối rời rạc ở Bài tập 3.3. Tính tần
+  suất thực nghiệm. Vẽ biểu đồ cột phân phối
+  </strong>
+</div>
+```{r}
+p = c(0.1, 0.2, 0.3, 0.3, 0.1)
+x = sample(x = 1:5, size = 100, replace = TRUE, prob = p)
+TanSuat = function(x){
+  res = as.numeric(table(factor(x, levels = 1:5)))/length(x)
+  return (res)
+}
+ketqua = TanSuat(x)
+cat(ketqua)
+barplot(ketqua, main = "Bài tập 3.11, 3.12, 3.13", col = "red")
+```
+
+## **Bài tập 3.14, 3.15, 3.16**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Tạo một hàn mật độ $f(x) = 3x^2$ trên đoạn $[0, 1]$. Kiểm tra tính hợp lệ của hàm 
+  mật độ. Tính xác suất $P(0.2 <= X <= 0.6)$.
+  </strong>
+</div>
+```{r}
+f = function(x) ifelse(x >= 0 & x <= 1, 3*x^2, 0)
+F = function(a) integrate(function(x) f(x), lower = -Inf, upper = a)$value
+I = integrate(function(x) f(x), lower = -Inf, upper = Inf)$value
+P = integrate(function(x) f(x), lower = 0.2, upper = 0.6)$value
+PhanVi = uniroot(function(x) F(x) - 0.5, c(0, 1))$root
+cat("Kiểm tra I = ", I, "\n")
+cat("P(0.2 <= X <= 0.6) = ", P, "\n")
+cat("Phân vị ở mức 0.5 là: ", PhanVi)
+```
+
+## **Bài tập 3.17**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Tạo một bảng phân phối xác suất rời rạc với 7 giá trị bất kì và xác suất không đều.
+  Vẽ hàm phân phối.
+  </strong>
+</div>
+```{r}
+rm(list = ls())
+MakeBar = function(k){
+  x = sample(1:k, size = 100, replace = TRUE)
+  res = as.numeric(table(factor(x, levels = 1:k)))/100
+  return (res)
+}
+x = MakeBar(7)
+barplot(x, main = "Bài tập 3.17", col = "red")
+```
+
+## **Bài tập 3.18**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Tạo một hàm mật độ $f(x) = 1/2$ trên đoạn $[2, 4]$. Tính xác suất $P(X >= 3)$
+  </strong>
+</div>
+```{r}
+rm(list = ls())
+f = function(x) ifelse(x >= 2 & x <= 4, 1/2, 0)
+F = function(a) integrate(function(x) f(x), lower = -Inf, upper = a)$value
+P = 1 - F(3)
+cat("P(X >= 3) = ", P)
+```
+
+## **Bài tập 3.19**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Tạo một mẫu ngẫu nhiên từ phân phối đều trên đoạn $[2, 4]$. Vẽ histogram.
+  </strong>
+</div>
+```{r}
+rm(list = ls())
+x = runif(n = 100, min = 2, max = 4)
+hist(x, main = "Bài tập 3.19")
+```
+
+## **Bài tập 3.20**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> tạo một hàm mật độ $f(x) = 6x(1 - x)$ trên đoạn $[0, 1]$. Kiểm tra tính hợp lệ.
+  </strong>
+</div>
+```{r}
+f = function(x) ifelse(x >= 0 & x <= 1, 6*x*(1-x), 0)
+integrate(function(x) f(x), lower = -Inf, upper = Inf)$value
+```
+
+## **Bài tập 3.21**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Tính phân vị mức 0.25 của biến ngẫu nhiên rời rạc ở Bài tập 3.17
+  </strong>
+</div>
+```{r}
+rm(list = ls())
+MakeBar = function(k){
+  x = sample(1:k, size = 100, replace = TRUE)
+  res = as.numeric(table(factor(x, levels = 1:k)))/100
+  return (res)
+}
+k = 1:7
+x = MakeBar(7)
+F = cumsum(x)
+K = k[F >= 0.25]
+K[1]
+```
+
+## **Bài tập 3.22**
+<div style="border: 1.5px solid #2b6cb0; background-color: #ebf8ff; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+  <strong> Tạo một mô phỏng 100 lần rút thăm từ tập giá trị {$A, B, C$}, với xác suất
+  0.2, 0.5, 0.3. Vẽ biểu đồ tần suất.
+  </strong>
+</div>
+```{r}
+rm(list = ls())
+res = sample(x = c("A", "B", "C"), size = 100, replace = TRUE, prob = c(0.2, 0.5, 0.3))
+freq = table(res)
+barplot(freq, col = "lightblue")
+```
